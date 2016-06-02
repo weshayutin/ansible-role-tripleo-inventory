@@ -26,7 +26,8 @@ Host undercloud
 
 Host {{ host }}
     Hostname {{ hostvars[host].ansible_fqdn }}
-    IdentityFile {{ working_dir }}/id_rsa_overcloud
+    ProxyCommand ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ConnectTimeout=60 -F {{ working_dir }}/ssh.local.config.ansible undercloud -W {{ hostvars[host].ansible_fqdn }}:22
+    IdentityFile /home/{{ ansible_user_id }}/id_rsa_overcloud
     User heat-admin
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
