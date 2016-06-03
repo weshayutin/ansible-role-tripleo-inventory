@@ -109,11 +109,17 @@
 - name: regenerate ssh config for ssh connections from the virthost
   template: >
     src=ssh_config_localhost.j2
-    dest={{ working_dir }}/ssh.local.config.ansible mode=0755
+    dest=/home/{{ ansible_user_dir }}/ssh.local.config.ansible mode=0755
   delegate_to: virthost
 
-#The overcloud key is only available when inventory is called on the overcloud
+#used when virthost == localhost
 - name: transfer the ssh keys to the virthost
   shell: "scp -F {{ local_working_dir }}/ssh.config.ansible {{ local_working_dir }}/id_rsa_* virthost:{{ working_dir }}"
+  when: inventory == "all"
+  delegate_to: localhost
+
+#used when virthost == localhost
+- name: transfer the hosts file to the virthost
+  shell: "scp -F {{ local_working_dir }}/ssh.config.ansible {{ local_working_dir }}/hosts virthost:{{ working_dir }}"
   when: inventory == "all"
   delegate_to: localhost

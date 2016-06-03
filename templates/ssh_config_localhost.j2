@@ -8,14 +8,14 @@
 
 Host undercloud-root
     Hostname {{ undercloud_ip.stdout }}
-    IdentityFile {{ working_dir }}/id_rsa_undercloud
+    IdentityFile /home/{{ ansible_user_id }}/id_rsa_undercloud
     IdentitiesOnly yes
     User root
     StrictHostKeyChecking no
 
 Host undercloud
     Hostname {{ undercloud_ip.stdout }}
-    IdentityFile {{ working_dir }}/id_rsa_undercloud
+    IdentityFile /home/{{ ansible_user_id }}/id_rsa_undercloud
     IdentitiesOnly yes
     User stack
     StrictHostKeyChecking no
