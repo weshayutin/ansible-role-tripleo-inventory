@@ -7,14 +7,14 @@
 {% endif %}
 
 Host undercloud-root
-    Hostname {{ undercloud_ip.stdout }}
+    Hostname {{ undercloud_ip }}
     IdentityFile /home/{{ ansible_user_id }}/id_rsa_undercloud
     IdentitiesOnly yes
     User root
     StrictHostKeyChecking no
 
 Host undercloud
-    Hostname {{ undercloud_ip.stdout }}
+    Hostname {{ undercloud_ip }}
     IdentityFile /home/{{ ansible_user_id }}/id_rsa_undercloud
     IdentitiesOnly yes
     User stack
