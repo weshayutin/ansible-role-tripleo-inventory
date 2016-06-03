@@ -115,7 +115,7 @@
 - name: regenerate ssh config for ssh connections from the virthost
   template: >
     src=ssh_config_localhost.j2
-    dest=/home/{{ ansible_user_dir }}/ssh.local.config.ansible mode=0755
+    dest={{ local_working_dir }}/ssh.config.local.ansible mode=0755
   delegate_to: virthost
 
 #used when virthost == localhost
@@ -125,7 +125,7 @@
   delegate_to: localhost
 
 #used when virthost == localhost
-- name: transfer the hosts file to the virthost
-  shell: "scp -F {{ local_working_dir }}/ssh.config.ansible {{ local_working_dir }}/hosts virthost:{{ working_dir }}"
+- name: transfer the ssh config to the virthost
+  shell: "scp -F {{ local_working_dir }}/ssh.config.ansible {{ local_working_dir }}/ssh.config.* virthost:{{ working_dir }}"
   when: inventory == "all"
   delegate_to: localhost
