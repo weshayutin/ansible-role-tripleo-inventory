@@ -96,7 +96,7 @@
 - name: set undercloud ssh proxy command
   set_fact: undercloud_ssh_proxy_command="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
       -o ConnectTimeout=60 -i {{ ansible_user_id }}/id_rsa_virt_power
-      {{ ansible_user }}@{{ hostvars['localhost'].ansible_eth0.ipv4.address }}
+      {{ ansible_user }}@{{ hostvars['localhost'].ansible_default_ipv4.address }}
       -W {{ undercloud_ip.stdout }}:22"
   when: hostvars[groups['virthost'][0]].ansible_private_key_file is not defined
 
