@@ -77,15 +77,18 @@
     ansible_private_key_file="{{ lookup('env', 'PWD') }}/id_rsa_overcloud"
   when: item.key.startswith('overcloud-objectstorage') and inventory == "all"
 
-#this is required until the undercloud ip is included in the undercloud hostvars
-- name: get undercloud ip
-  shell: /usr/sbin/ip addr show eth0 | grep -Po 'inet \K[\d.]+'
-  register: registered_undercloud_ip
-  delegate_to: undercloud
+# #this is required until the undercloud ip is included in the undercloud hostvars
+# - name: get undercloud ip
+#   shell: /usr/sbin/ip addr show eth0 | grep -Po 'inet \K[\d.]+'
+#   register: registered_undercloud_ip
+#   delegate_to: undercloud
+
+- name: debug
+  debug: var=hostvars['undercloud']
 
 #required for regeneration of ssh.config.ansible
 - name: set_fact for undercloud ip
-  set_fact: undercloud_ip={{ registered_undercloud_ip }}
+  set_fact: undercloud_ip={{ hostvars['undercloud'].undercloud_ip }}
 
 #required for regeneration of ssh.config.ansible
 - name: set undercloud ssh proxy command
