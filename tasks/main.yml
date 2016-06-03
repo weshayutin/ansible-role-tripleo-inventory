@@ -116,10 +116,10 @@
   debug: var=hostvars['virthost']
 
 - name: regenerate ssh config for ssh connections from the virthost
+  delegate_to: localhost
   template: >
     src=ssh_config_localhost.j2
     dest={{ local_working_dir }}/ssh.config.local.ansible mode=0755
-  delegate_to: virthost
 
 #used when virthost == localhost
 - name: transfer the ssh keys to the virthost
