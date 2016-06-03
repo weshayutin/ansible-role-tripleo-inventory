@@ -124,11 +124,9 @@
 #used when virthost == localhost
 - name: transfer the ssh keys to the virthost
   shell: "scp -F {{ local_working_dir }}/ssh.config.ansible {{ local_working_dir }}/id_rsa_* virthost:{{ working_dir }}"
-  when: inventory == "all"
   delegate_to: localhost
 
 #used when virthost == localhost
 - name: transfer the ssh config to the virthost
   shell: "scp -F {{ local_working_dir }}/ssh.config.ansible {{ local_working_dir }}/ssh.config.* virthost:{{ working_dir }}"
-  when: inventory == "all"
   delegate_to: localhost
