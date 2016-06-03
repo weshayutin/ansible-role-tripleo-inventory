@@ -77,14 +77,8 @@
     ansible_private_key_file="{{ lookup('env', 'PWD') }}/id_rsa_overcloud"
   when: item.key.startswith('overcloud-objectstorage') and inventory == "all"
 
-# #this is required until the undercloud ip is included in the undercloud hostvars
-# - name: get undercloud ip
-#   shell: /usr/sbin/ip addr show eth0 | grep -Po 'inet \K[\d.]+'
-#   register: registered_undercloud_ip
-#   delegate_to: undercloud
-
 - name: debug
-  debug: var=hostvars['undercloud']
+  debug: var=hostvars['localhost']
 
 #required for regeneration of ssh.config.ansible
 - name: set_fact for undercloud ip
@@ -96,6 +90,15 @@
       -o ConnectTimeout=60 -i {{ hostvars[groups['virthost'][0]].ansible_private_key_file }}
       {{ ansible_user }}@{{ hostvars[groups['virthost'][0]].ansible_host }}
       -W {{ undercloud_ip.stdout }}:22"
+  when: hostvars[groups['virthost'][0]].ansible_private_key_file is defined
+
+#required for regeneration of ssh.config.ansible
+- name: set undercloud ssh proxy command
+  set_fact: undercloud_ssh_proxy_command="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
+      -o ConnectTimeout=60 -i {{ ansible_user_id }}/id_rsa_virt_power
+      {{ ansible_user }}@{{ hostvars['localhost'].ansible_eth0.ipv4.address }}
+      -W {{ undercloud_ip.stdout }}:22"
+  when: hostvars[groups['virthost'][0]].ansible_private_key_file is not defined
 
 - name: create inventory from template
   delegate_to: localhost
