@@ -5,7 +5,7 @@
 {% set ssh_host = ansible_host %}
 {% endif %}
 
-{% if groups["virthost"] is defined %}
+{% if hostvars[groups['virthost'][0]].ansible_host is defined %}
 
 Host virthost
     Hostname {{ hostvars[groups['virthost'][0]].ansible_host }}
@@ -14,7 +14,17 @@ Host virthost
     StrictHostKeyChecking no
     UserKnownHostsFile=/dev/null
 
+{% else %}
+
+Host virthost
+    Hostname {{ hostvars['localhost'].ansible_default_ipv4.address }}
+    IdentityFile {{ local_working_dir }}/id_rsa_virt_host
+    User {{ ansible_user }}
+    StrictHostKeyChecking no
+    UserKnownHostsFile=/dev/null
+
 {% endif %}
+
 
 Host undercloud-root
     ProxyCommand {{ undercloud_ssh_proxy_command }}
