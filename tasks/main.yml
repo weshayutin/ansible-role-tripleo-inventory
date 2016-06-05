@@ -130,3 +130,8 @@
 - name: transfer the ssh config to the virthost
   shell: "scp -F {{ local_working_dir }}/ssh.config.ansible {{ local_working_dir }}/ssh.config.* virthost:{{ working_dir }}"
   delegate_to: localhost
+
+#used when virthost == localhost
+- name: transfer the hosts to the virthost
+  shell: "scp -F {{ local_working_dir }}/ssh.config.ansible {{ local_working_dir }}/hosts virthost:{{ working_dir }}"
+  delegate_to: localhost
