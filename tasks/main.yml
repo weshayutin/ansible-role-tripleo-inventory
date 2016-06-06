@@ -77,9 +77,6 @@
     ansible_private_key_file="{{ lookup('env', 'PWD') }}/id_rsa_overcloud"
   when: item.key.startswith('overcloud-objectstorage') and inventory == "all"
 
-- name: debug
-  debug: var=hostvars['localhost']
-
 #required for regeneration of ssh.config.ansible
 - name: set_fact for undercloud ip
   set_fact: undercloud_ip={{ hostvars['undercloud'].undercloud_ip }}
@@ -112,9 +109,6 @@
     src=ssh_config.j2
     dest={{ local_working_dir }}/ssh.config.ansible mode=0755
 
-- name: debug
-  debug: var=hostvars['virthost']
-
 - name: regenerate ssh config for ssh connections from the virthost
   delegate_to: localhost
   template: >
@@ -132,6 +126,6 @@
   delegate_to: localhost
 
 #used when virthost == localhost
-- name: transfer the hosts to the virthost
+- name: transfer the ansible hosts file to the virthost
   shell: "scp -F {{ local_working_dir }}/ssh.config.ansible {{ local_working_dir }}/hosts virthost:{{ working_dir }}"
   delegate_to: localhost
