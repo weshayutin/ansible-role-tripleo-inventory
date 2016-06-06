@@ -86,7 +86,7 @@
   set_fact: undercloud_ssh_proxy_command="ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no
       -o ConnectTimeout=60 -i {{ hostvars[groups['virthost'][0]].ansible_private_key_file }}
       {{ ansible_user }}@{{ hostvars[groups['virthost'][0]].ansible_host }}
-      -W {{ undercloud_ip.stdout }}:22"
+      -W {{ undercloud_ip }}:22"
   when: hostvars[groups['virthost'][0]].ansible_private_key_file is defined
 
 #required for regeneration of ssh.config.ansible
